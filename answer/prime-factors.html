@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Prime Factors Code Kata Answer - Paul Gower</title>
+        <style>
+            body
+            {
+                font-family: Arial;
+                font-size: 10pt;
+            }
+            span.input
+            {
+                margin-left: 1.75em;
+            }
+            span.output
+            {
+                margin-left: 1em;
+            }
+            #errorMessages
+            {
+                color: #900;
+            }            
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="errorMessages"></div>
+        <div>
+            <label for="input">Input</label><br />
+            <input type="textbox" id="input" />
+        </div>
+        <br />
+        <div id="outputSection">
+            <label for="output" id="outputLabel">Prime Factors</label><br />
+            <div id="output"></div>
+        </div>
+        
+        <h3>Unit Tests</h3>        
+        <div class="input">
+            <label for="input1">Input 1:</label>
+            <span class="input" id="input1">1</span>
+        </div>
+        <div class="output">
+            <label for="output1">Output 1:</label>
+            <span class="output" id="output1">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input2">Input 2:</label>
+            <span class="input" id="input2">2</span>
+        </div>
+        <div class="output">
+            <label for="output2">Output 2:</label>
+            <span class="output" id="output2">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input3">Input 3:</label>
+            <span class="input" id="input3">3</span>
+        </div>
+        <div class="output">
+            <label for="output3">Output 3:</label>
+            <span class="output" id="output3">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input4">Input 4:</label>
+            <span class="input" id="input4">4</span>
+        </div>
+        <div class="output">
+            <label for="output4">Output 4:</label>
+            <span class="output" id="output4">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input5">Input 5:</label>
+            <span class="input" id="input5">6</span>
+        </div>
+        <div class="output">
+            <label for="output5">Output 5:</label>
+            <span class="output" id="output5">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input6">Input 6:</label>
+            <span class="input" id="input6">6</span>
+        </div>
+        <div class="output">
+            <label for="output6">Output 6:</label>
+            <span class="output" id="output6">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input7">Input 7:</label>
+            <span class="input" id="input7">8</span>
+        </div>
+        <div class="output">
+            <label for="output7">Output 7:</label>
+            <span class="output" id="output7">TBD</span>
+        </div>
+        <br />
+        <div class="input">
+            <label for="input8">Input 8:</label>
+            <span class="input" id="input8">9</span>
+        </div>
+        <div class="output">
+            <label for="output8">Output 8:</label>
+            <span class="output" id="output8">TBD</span>
+        </div>
+        <script type="text/javascript">
+            if (!String.prototype.isNumber)
+            {
+                String.prototype.isNumber = function () {
+                    //code is from CMS user's answer from this stack overflow question: http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric
+                    return !isNaN(parseFloat(this)) && isFinite(this);
+                };
+            }
+
+            if (!String.prototype.isInteger)
+            {
+                String.prototype.isInteger = function () {
+                    //part of this code is from kennebec user from this stack overflow question: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
+                    return (this.isNumber() && this % 1 === 0);
+                }
+            }
+
+            function primeFactors(number) {
+                var factors = [];
+                var factorsAsString = "";
+
+                for (var i = 2; number > 1; ++i)
+                {
+                    console.log("i = " + i);
+                    while (number % i === 0)
+                    {
+                        console.log("number = " + number);
+                        factors.push(number);
+                        number = number / i;
+                        console.log("number / i = " + number);
+                    }
+                }
+
+                factorsAsString = factors.join();
+
+                return factorsAsString;
+            }
+
+            function autoPrimeFactors() {
+                var inputs = $("span.input");
+                var outputs = $("span.output");
+                var answers = [];
+                var i = 1;
+                inputs.each(function () {
+                    var answer;
+                    var input = $(this).html();
+                    console.log("input = " + input);
+                    answer = primeFactors(input)
+                    $("#output"+i).html(answer);
+                    ++i;
+                });
+            }
+
+            function manualPrimeFactors() {
+                var answerAsString;
+                var inputAsString = $("#input").val();
+                console.log('input (as string): ' + inputAsString);
+
+                if (inputAsString.length > 0 && inputAsString.isInteger())
+                {
+                    answerAsString = primeFactors(inputAsString);
+                    console.log('answer (as string): ' + answerAsString);
+
+                    $("#errorMessages").hide();
+
+                    $("#output").html(answerAsString);
+                    $("#outputSection").show();
+                    console.log("output section shown");
+                }
+                else
+                {
+                    $("#errorMessages").html("Input must be an integer.");
+                    $("#errorMessages").show();
+                    $("#outputSection").hide();
+                    console.log("output section hidden");
+                }                
+            }
+
+            $(document).ready(function () {
+                $("#input").on("keyup", function () {
+                    manualPrimeFactors();
+                });
+
+                //run first time to initialize
+                manualPrimeFactors();
+
+                //run througn the input values defined in the code kata.
+                autoPrimeFactors();
+            });
+        </script>
+    </body>
+</html>
